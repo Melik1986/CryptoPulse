@@ -9,16 +9,13 @@
 
 import dynamic from 'next/dynamic';
 
-const HeroSceneDynamic = dynamic(
-  () => import('./HeroScene').then((mod) => ({ default: mod.HeroScene })),
-  {
-    ssr: false,
-    loading: () => (
-      <div className="h-screen w-full flex items-center justify-center bg-[#0a0e1a]">
-        <div className="text-cyan-400 text-lg">Loading Vault...</div>
-      </div>
-    ),
-  },
-);
+const HeroSceneDynamic = dynamic(() => import('./HeroScene'), {
+  ssr: false,
+  loading: () => (
+    <div className="h-screen w-full flex items-center justify-center bg-[#0a0e1a]">
+      <div className="text-cyan-400 text-lg">Loading Vault...</div>
+    </div>
+  ),
+});
 
 export { HeroSceneDynamic as HeroScene };

@@ -24,7 +24,7 @@ function SceneLoader() {
   );
 }
 
-export function HeroScene() {
+function HeroScene() {
   return (
     <div className="h-screen w-full relative" id="vault-hero">
       <Canvas
@@ -42,3 +42,5 @@ export function HeroScene() {
     </div>
   );
 }
+
+export default HeroScene;

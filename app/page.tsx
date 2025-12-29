@@ -7,10 +7,16 @@ import {
   TrendingCoinsFallback,
 } from '@/components/home/fallback';
 import Categories from '@/components/home/Categories';
+import { HeroScene } from '@/components/vault-hero';
 
 const Page = async () => {
   return (
     <main className="main-container">
+      {/* Hero Section с 3D Vault */}
+      <section className="w-full">
+        <HeroScene />
+      </section>
+
       <section className="home-grid">
         <Suspense fallback={<CoinOverviewFallback />}>
           <CoinOverview />
