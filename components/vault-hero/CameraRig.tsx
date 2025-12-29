@@ -4,17 +4,18 @@
  * CameraRig - Управление камерой с параллакс-эффектом
  * @module components/vault-hero/CameraRig
  *
- * TODO Этап 2: Подключить useVaultStore для mouse
+ * ✅ Этап 2: Подключен useVaultStore для mouse
  */
 
 import { useFrame, useThree } from '@react-three/fiber';
+import { useVaultMouse } from '@/lib/stores/vault-store';
 import * as THREE from 'three';
 
 export function CameraRig() {
   const { camera } = useThree();
 
-  // TODO Этап 2: Заменить на useVaultStore
-  const mouse = { x: 0, y: 0 };
+  // ✅ Этап 2: Подключен useVaultStore
+  const mouse = useVaultMouse();
 
   /* eslint-disable react-hooks/immutability -- R3F стандартный паттерн: мутация camera в useFrame */
   useFrame(() => {

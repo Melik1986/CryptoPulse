@@ -4,20 +4,21 @@
  * Vault - 3D модель хранилища с двумя створками
  * @module components/vault-hero/Vault
  *
- * TODO Этап 2: Подключить useVaultStore для vaultOffset
+ * ✅ Этап 2: Подключен useVaultStore для vaultOffset
  * TODO Этап 3: Загрузить GLB модель вместо boxGeometry
  */
 
 import { useRef } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { useVaultOffset } from '@/lib/stores/vault-store';
 import * as THREE from 'three';
 
 export function Vault() {
   const leftRef = useRef<THREE.Mesh>(null);
   const rightRef = useRef<THREE.Mesh>(null);
 
-  // TODO Этап 2: Заменить на useVaultStore
-  const vaultOffset = 0;
+  // ✅ Этап 2: Подключен useVaultStore
+  const vaultOffset = useVaultOffset();
 
   useFrame(() => {
     if (leftRef.current && rightRef.current) {
