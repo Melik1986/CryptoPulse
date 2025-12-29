@@ -4,8 +4,8 @@
  * HeroScene - Главный контейнер для 3D Canvas
  * @module components/vault-hero/HeroScene
  *
- * TODO Этап 2: Подключить useVaultEvents
- * TODO Этап 4: Добавить LaserFlow
+ * ✅ Этап 4: Подключен useVaultEvents для mousemove
+ * TODO Этап 6: Добавить LaserFlow
  */
 
 import { Canvas } from '@react-three/fiber';
@@ -13,6 +13,7 @@ import { Suspense } from 'react';
 import { Vault } from './Vault';
 import { CameraRig } from './CameraRig';
 import { Lights } from './Lights';
+import { useVaultEvents } from '@/hooks/useVaultEvents';
 
 /** Loading fallback для 3D сцены */
 function SceneLoader() {
@@ -25,18 +26,22 @@ function SceneLoader() {
 }
 
 function HeroScene() {
+  // ✅ Этап 4: Подключен useVaultEvents для обработки mousemove
+  useVaultEvents();
+
   return (
     <div className="h-screen w-full relative" id="vault-hero">
       <Canvas
         camera={{ position: [0, 0, 8], fov: 50 }}
         dpr={[1, 2]}
-        gl={{ antialias: true, alpha: true }}
+        gl={{ antialias: true, alpha: false }}
+        style={{ background: '#0a0e1a' }}
       >
         <Suspense fallback={<SceneLoader />}>
           <Lights />
           <CameraRig />
           <Vault />
-          {/* TODO Этап 4: <LaserFlow /> */}
+          {/* TODO Этап 6: <LaserFlow /> */}
         </Suspense>
       </Canvas>
     </div>

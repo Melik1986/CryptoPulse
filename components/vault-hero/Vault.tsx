@@ -5,49 +5,55 @@
  * @module components/vault-hero/Vault
  *
  * ✅ Этап 2: Подключен useVaultStore для vaultOffset
- * TODO Этап 3: Загрузить GLB модель вместо boxGeometry
+ * ✅ Этап 4: Загружена GLB модель Vault.glb
  */
 
-import { useRef } from 'react';
+import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
+import { useGLTF } from '@react-three/drei';
 import { useVaultOffset } from '@/lib/stores/vault-store';
 import * as THREE from 'three';
 
+// Загрузка GLB модели
+useGLTF.preload('/model/Vault.glb');
+
 export function Vault() {
-  const leftRef = useRef<THREE.Mesh>(null);
-  const rightRef = useRef<THREE.Mesh>(null);
+  // Загружаем GLB модель
+  const { scene } = useGLTF('/model/Vault.glb');
+  const vaultRef = useRef<THREE.Group>(null);
 
   // ✅ Этап 2: Подключен useVaultStore
   const vaultOffset = useVaultOffset();
 
+  // Клонируем сцену один раз при монтировании
+  const clonedScene = useMemo(() => scene.clone(), [scene]);
+
   useFrame(() => {
-    if (leftRef.current && rightRef.current) {
-      leftRef.current.position.x = THREE.MathUtils.lerp(
-        leftRef.current.position.x,
-        -0.5 - vaultOffset,
-        0.1,
-      );
-      rightRef.current.position.x = THREE.MathUtils.lerp(
-        rightRef.current.position.x,
-        0.5 + vaultOffset,
-        0.1,
-      );
+    if (vaultRef.current) {
+      // Ищем части модели для анимации раздвижения
+      // Предполагаем что в модели есть части с именами "Left" и "Right" или используем первый и второй children
+      const children = vaultRef.current.children;
+      if (children.length >= 2) {
+        const leftPart = children[0];
+        const rightPart = children[1];
+
+        if (leftPart && rightPart) {
+          leftPart.position.x = THREE.MathUtils.lerp(leftPart.position.x, -0.5 - vaultOffset, 0.1);
+          rightPart.position.x = THREE.MathUtils.lerp(rightPart.position.x, 0.5 + vaultOffset, 0.1);
+        }
+      }
     }
   });
 
   return (
-    <group>
-      {/* Левая створка */}
-      <mesh ref={leftRef} position={[-0.5, 0, 0]} castShadow receiveShadow>
-        <boxGeometry args={[1, 4, 0.5]} />
-        <meshStandardMaterial color="#1b1f2a" metalness={0.9} roughness={0.2} />
-      </mesh>
-
-      {/* Правая створка */}
-      <mesh ref={rightRef} position={[0.5, 0, 0]} castShadow receiveShadow>
-        <boxGeometry args={[1, 4, 0.5]} />
-        <meshStandardMaterial color="#1b1f2a" metalness={0.9} roughness={0.2} />
-      </mesh>
+    <group ref={vaultRef} position={[0, -2.5, 0]}>
+      <primitive
+        object={clonedScene}
+        scale={[1, 1, 1]}
+        position={[0, 0, 0]}
+        castShadow
+        receiveShadow
+      />
     </group>
   );
 }
