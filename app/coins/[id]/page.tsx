@@ -13,7 +13,7 @@ const Page = async ({ params }: NextPageProps) => {
     fetcher<CoinDetailsData>(`/coins/${id}`, {
       dex_pair_format: 'contract_address',
     }),
-    fetcher<OHLCData>(`/coins/${id}/ohlc`, {
+    fetcher<OHLCData[]>(`/coins/${id}/ohlc`, {
       vs_currency: 'usd',
       days: 1,
       interval: 'hourly',
@@ -65,8 +65,9 @@ const Page = async ({ params }: NextPageProps) => {
   return (
     <main id="coin-details-page">
       <section className="primary">
+        {/* TODO: Незавершённая фича - children планируется использовать в будущем */}
         <LiveDataWrapper coinId={id} poolId={pool.id} coin={coinData} coinOHLCData={coinOHLCData}>
-          <h4>Exchange Listings</h4>
+          {/* <h4>Exchange Listings</h4> */}
         </LiveDataWrapper>
       </section>
 

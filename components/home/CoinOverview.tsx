@@ -5,7 +5,11 @@ import { formatCurrency } from '@/lib/utils';
 import { CoinOverviewFallback } from './fallback';
 import CandlestickChart from '@/components/CandlestickChart';
 
-const CoinOverview = async () => {
+/**
+ * Fetches coin data for overview
+ * Returns null if fetching fails
+ */
+async function fetchCoinData() {
   try {
     const [coin, coinOHLCData] = await Promise.all([
       fetcher<CoinDetailsData>('/coins/bitcoin', {
@@ -18,26 +22,43 @@ const CoinOverview = async () => {
         precision: 'full',
       }),
     ]);
-
-    return (
-      <div id="coin-overview">
-        <CandlestickChart data={coinOHLCData} coinId="bitcoin">
-          <div className="header pt-2">
-            <Image src={coin.image.large} alt={coin.name} width={56} height={56} />
-            <div className="info">
-              <p>
-                {coin.name} / {coin.symbol.toUpperCase()}
-              </p>
-              <h1>{formatCurrency(coin.market_data.current_price.usd)}</h1>
-            </div>
-          </div>
-        </CandlestickChart>
-      </div>
-    );
+    return { coin, coinOHLCData };
   } catch (error) {
     console.error('Error fetching coin overview:', error);
+    return null;
+  }
+}
+
+const CoinOverview = async () => {
+  const data = await fetchCoinData();
+
+  if (!data) {
     return <CoinOverviewFallback />;
   }
+
+  const { coin, coinOHLCData } = data;
+
+  return (
+    <div id="coin-overview">
+      <CandlestickChart data={coinOHLCData} coinId="bitcoin">
+        <div className="header pt-2">
+          <Image
+            src={coin.image.large}
+            alt={coin.name}
+            width={56}
+            height={56}
+            style={{ width: 'auto', height: 'auto' }}
+          />
+          <div className="info">
+            <p>
+              {coin.name} / {coin.symbol.toUpperCase()}
+            </p>
+            <h1>{formatCurrency(coin.market_data.current_price.usd)}</h1>
+          </div>
+        </div>
+      </CandlestickChart>
+    </div>
+  );
 };
 
 export default CoinOverview;
