@@ -316,3 +316,45 @@ interface PoolData {
   name: string;
   network: string;
 }
+
+// ============================================
+// Three.js & 3D Assets Type Declarations
+// ============================================
+
+/**
+ * Модульные декларации для 3D файлов
+ */
+declare module '*.glb' {
+  const src: string;
+  export default src;
+}
+
+declare module '*.gltf' {
+  const src: string;
+  export default src;
+}
+
+/**
+ * Vault Hero Store State
+ */
+interface VaultState {
+  /** Offset для раздвижения створок Vault (0 = закрыт, 1 = полностью открыт) */
+  vaultOffset: number;
+  /** Позиция мыши для parallax эффекта камеры */
+  mouse: { x: number; y: number };
+  /** Прогресс скролла (0-1) */
+  scrollProgress: number;
+  /** Флаг активности анимации */
+  isAnimating: boolean;
+}
+
+/**
+ * Vault Hero Store Actions
+ */
+interface VaultActions {
+  setVaultOffset: (offset: number) => void;
+  setMouse: (x: number, y: number) => void;
+  setScrollProgress: (progress: number) => void;
+  setIsAnimating: (isAnimating: boolean) => void;
+  reset: () => void;
+}
