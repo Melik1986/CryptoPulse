@@ -10,6 +10,7 @@
 
 import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react';
+import { Grid } from '@react-three/drei';
 import { Vault } from './Vault';
 import { CameraRig } from './CameraRig';
 import { Lights } from './Lights';
@@ -40,6 +41,19 @@ function HeroScene() {
         <Suspense fallback={<SceneLoader />}>
           <Lights />
           <CameraRig />
+          {/* Сетка на фоне (вертикально за моделью) */}
+          <Grid
+            args={[60, 60]}
+            cellColor="#888888"
+            sectionColor="#AAAAAA"
+            cellThickness={0.5}
+            sectionThickness={1}
+            position={[0, 0, -25]}
+            rotation={[Math.PI / 2, 0, 0]}
+            infiniteGrid={true}
+            fadeDistance={50}
+            fadeStrength={1.5}
+          />
           <Vault />
           {/* TODO Этап 6: <LaserFlow /> */}
         </Suspense>
