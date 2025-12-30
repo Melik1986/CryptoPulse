@@ -15,6 +15,7 @@ import { Vault } from './Vault';
 import { CameraRig } from './CameraRig';
 import { Lights } from './Lights';
 import { useVaultEvents } from '@/hooks/useVaultEvents';
+import { useVaultScroll } from '@/hooks/useVaultScroll';
 
 /** Loading fallback для 3D сцены */
 function SceneLoader() {
@@ -29,6 +30,8 @@ function SceneLoader() {
 function HeroScene() {
   // ✅ Этап 4: Подключен useVaultEvents для обработки mousemove
   useVaultEvents();
+  // ✅ Этап 5: Подключен useVaultScroll для обработки скролла
+  useVaultScroll();
 
   return (
     <div className="h-screen w-full relative" id="vault-hero">

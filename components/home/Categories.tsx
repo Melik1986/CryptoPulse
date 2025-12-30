@@ -9,6 +9,11 @@ const Categories = async () => {
   try {
     const categories = await fetcher<Category[]>('/coins/categories');
 
+    if (!Array.isArray(categories)) {
+      console.error('Invalid categories data:', categories);
+      throw new Error('Categories data is not an array');
+    }
+
     const columns: DataTableColumn<Category>[] = [
       { header: 'Category', cellClassName: 'category-cell', cell: (category) => category.name },
       {

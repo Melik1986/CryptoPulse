@@ -21,12 +21,19 @@ const EXPLICIT_MOCK_MODE = isMockMode();
  * Returns mock data based on endpoint
  */
 function getMockData<T>(endpoint: string): T | null {
+  console.log('[MockData] Requesting endpoint:', endpoint);
+
   // Specific Bitcoin endpoints (for main page)
   if (endpoint.includes('/coins/bitcoin/ohlc')) {
     return mockOHLCData as T;
   }
   if (endpoint === '/coins/bitcoin' || endpoint.startsWith('/coins/bitcoin?')) {
     return mockBitcoinData as T;
+  }
+  // Categories - strict check first
+  if (endpoint === '/coins/categories' || endpoint.includes('/coins/categories')) {
+    console.log('[MockData] Returning categories mock');
+    return mockCategories as T;
   }
   // Dynamic coin OHLC data: /coins/{id}/ohlc
   const ohlcMatch = endpoint.match(/\/coins\/([^/]+)\/ohlc/);
@@ -45,10 +52,6 @@ function getMockData<T>(endpoint: string): T | null {
   // Trending coins
   if (endpoint.includes('/search/trending')) {
     return mockTrendingCoins as T;
-  }
-  // Categories
-  if (endpoint.includes('/coins/categories')) {
-    return mockCategories as T;
   }
   return null;
 }

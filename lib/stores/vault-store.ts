@@ -104,22 +104,12 @@ export const useVaultStore = create<VaultStore>()(
         );
       },
     }),
-    {
-      name: 'vault-store',
-      enabled: process.env.NODE_ENV === 'development',
-    },
+    { name: 'VaultStore' },
   ),
 );
 
 /**
- * Селекторы для оптимизации производительности
- * Используйте эти хуки вместо прямого доступа к store
- */
-
-/**
- * Селектор для vaultOffset
- * @example
- * const vaultOffset = useVaultOffset();
+ * Хук для получения текущего смещения створок
  */
 export const useVaultOffset = () => useVaultStore((state) => state.vaultOffset);
 
