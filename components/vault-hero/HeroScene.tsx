@@ -11,6 +11,7 @@
 import { Canvas } from '@react-three/fiber';
 import { Suspense } from 'react';
 import { Grid } from '@react-three/drei';
+import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import { Vault } from './Vault';
 import { CameraRig } from './CameraRig';
 import { Lights } from './Lights';
@@ -111,6 +112,10 @@ function HeroScene() {
           <Lights />
           <CameraRig />
           <Vault />
+          <EffectComposer>
+            <Bloom luminanceThreshold={0.2} luminanceSmoothing={0.9} height={300} intensity={0.5} />
+            <Vignette eskil={false} offset={0.1} darkness={0.8} />
+          </EffectComposer>
         </Suspense>
       </Canvas>
     </div>
