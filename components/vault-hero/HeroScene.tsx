@@ -52,11 +52,13 @@ function HeroScene() {
 
   const vaultOffset = useVaultStore((state) => state.vaultOffset);
   const mouse = useVaultStore((state) => state.mouse);
-  const [isLowEnd, setIsLowEnd] = useState(false);
-
-  useEffect(() => {
-    setIsLowEnd(isLowEndDevice());
-  }, []);
+  const [isLowEnd, setIsLowEnd] = useState(() => {
+    // Lazy initial state: выполняется только один раз при маунте
+    if (typeof window !== 'undefined') {
+      return isLowEndDevice();
+    }
+    return false;
+  });
 
   return (
     <div
