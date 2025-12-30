@@ -39,17 +39,21 @@ function HeroScene() {
   const mouse = useVaultStore((state) => state.mouse);
 
   return (
-    <div 
+    <div
       className="h-screen w-full relative bg-[#0a0e1a]" // Убрал overflow-hidden
       id="vault-hero"
-      style={{
-        '--mx': `${(mouse.x + 1) * 50}%`,
-        '--my': `${(1 - mouse.y) * 50}%`,
-      } as React.CSSProperties}
+      style={
+        {
+          '--mx': `${(mouse.x + 1) * 50}%`,
+          '--my': `${(1 - mouse.y) * 50}%`,
+        } as React.CSSProperties
+      }
     >
       {/* Layer 0: Laser Flow (Opaque Background) - Extended downwards */}
-      <div className="absolute inset-x-0 top-0 -bottom-32 z-0 pointer-events-none"> {/* bottom-32 (~128px) заходит на след. секцию */}
-        <LaserFlow 
+      <div className="absolute inset-x-0 top-0 -bottom-32 z-0 pointer-events-none">
+        {' '}
+        {/* bottom-32 (~128px) заходит на след. секцию */}
+        <LaserFlow
           horizontalBeamOffset={0}
           verticalBeamOffset={-0.3}
           verticalSizing={30.0}
@@ -65,14 +69,20 @@ function HeroScene() {
       </div>
 
       {/* Layer 1: Grid with Reveal Mask (Interactive Middle Layer) */}
-      <div 
+      <div
         className="absolute inset-0 z-10 pointer-events-none"
         style={{
-          maskImage: 'radial-gradient(circle 300px at var(--mx) var(--my), black 0%, transparent 100%)',
-          WebkitMaskImage: 'radial-gradient(circle 300px at var(--mx) var(--my), black 0%, transparent 100%)',
+          maskImage:
+            'radial-gradient(circle 300px at var(--mx) var(--my), black 0%, transparent 100%)',
+          WebkitMaskImage:
+            'radial-gradient(circle 300px at var(--mx) var(--my), black 0%, transparent 100%)',
         }}
       >
-        <Canvas camera={{ position: [0, 0, 8], fov: 50 }} dpr={[1, 2]} gl={{ antialias: true, alpha: true }}>
+        <Canvas
+          camera={{ position: [0, 0, 8], fov: 50 }}
+          dpr={[1, 2]}
+          gl={{ antialias: true, alpha: true }}
+        >
           <CameraRig />
           <Grid
             args={[60, 60]}

@@ -284,7 +284,7 @@ export const LaserFlow: React.FC<Props> = ({
 }) => {
   const mountRef = useRef<HTMLDivElement | null>(null);
   const rendererRef = useRef<THREE.WebGLRenderer | null>(null);
-  const uniformsRef = useRef<any>(null);
+  const uniformsRef = useRef<{ [key: string]: THREE.IUniform } | null>(null);
   const hasFadedRef = useRef(false);
   const rectRef = useRef<DOMRect | null>(null);
   const baseDprRef = useRef<number>(1);
@@ -447,12 +447,15 @@ export const LaserFlow: React.FC<Props> = ({
       const hb = rect.height * ratio;
       mouseTarget.set(x * ratio, hb - y * ratio);
     };
-    const onMove = (ev: PointerEvent | MouseEvent) => updateMouse(ev.clientX, ev.clientY);
+    const onMove = (ev: Event) => {
+      const e = ev as PointerEvent | MouseEvent;
+      updateMouse(e.clientX, e.clientY);
+    };
     const onLeave = () => mouseTarget.set(0, 0);
-    canvas.addEventListener('pointermove', onMove as any, { passive: true });
-    canvas.addEventListener('pointerdown', onMove as any, { passive: true });
-    canvas.addEventListener('pointerenter', onMove as any, { passive: true });
-    canvas.addEventListener('pointerleave', onLeave as any, { passive: true });
+    canvas.addEventListener('pointermove', onMove, { passive: true });
+    canvas.addEventListener('pointerdown', onMove, { passive: true });
+    canvas.addEventListener('pointerenter', onMove, { passive: true });
+    canvas.addEventListener('pointerleave', onLeave, { passive: true });
 
     const onCtxLost = (e: Event) => {
       e.preventDefault();
@@ -550,10 +553,10 @@ export const LaserFlow: React.FC<Props> = ({
       ro.disconnect();
       io.disconnect();
       document.removeEventListener('visibilitychange', onVis);
-      canvas.removeEventListener('pointermove', onMove as any);
-      canvas.removeEventListener('pointerdown', onMove as any);
-      canvas.removeEventListener('pointerenter', onMove as any);
-      canvas.removeEventListener('pointerleave', onLeave as any);
+      canvas.removeEventListener('pointermove', onMove);
+      canvas.removeEventListener('pointerdown', onMove);
+      canvas.removeEventListener('pointerenter', onMove);
+      canvas.removeEventListener('pointerleave', onLeave);
       canvas.removeEventListener('webglcontextlost', onCtxLost);
       canvas.removeEventListener('webglcontextrestored', onCtxRestored);
       geometry.dispose();
