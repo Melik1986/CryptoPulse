@@ -5,11 +5,11 @@
  * @module components/vault-hero/HeroScene
  *
  * ✅ Этап 4: Подключен useVaultEvents для mousemove
- * TODO Этап 6: Добавить LaserFlow
+ * ✅ Этап 6: Добавить LaserFlow
  */
 
 import { Canvas } from '@react-three/fiber';
-import { Suspense } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { Grid } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import { Vault } from './Vault';
@@ -19,6 +19,20 @@ import { useVaultEvents } from '@/hooks/useVaultEvents';
 import { useVaultScroll } from '@/hooks/useVaultScroll';
 import LaserFlow from './LaserBeam';
 import { useVaultStore } from '@/lib/stores/vault-store';
+
+/** Простая проверка на производительность устройства */
+const isLowEndDevice = () => {
+  if (typeof window === 'undefined') return false;
+  const canvas = document.createElement('canvas');
+  const gl = canvas.getContext('webgl');
+  if (!gl) return true;
+
+  const debugInfo = gl.getExtension('WEBGL_debug_renderer_info');
+  const renderer = debugInfo ? gl.getParameter(debugInfo.UNMASKED_RENDERER_WEBGL) : '';
+
+  // Эвристика: интегрированные видеокарты или мобильные GPU
+  return /Intel|SwiftShader|Mali|Adreno/i.test(renderer);
+};
 
 /** Loading fallback для 3D сцены */
 function SceneLoader() {
@@ -38,6 +52,11 @@ function HeroScene() {
 
   const vaultOffset = useVaultStore((state) => state.vaultOffset);
   const mouse = useVaultStore((state) => state.mouse);
+  const [isLowEnd, setIsLowEnd] = useState(false);
+
+  useEffect(() => {
+    setIsLowEnd(isLowEndDevice());
+  }, []);
 
   return (
     <div
@@ -59,7 +78,7 @@ function HeroScene() {
           verticalBeamOffset={-0.3}
           verticalSizing={30.0}
           horizontalSizing={1.0}
-          wispDensity={3.0}
+          wispDensity={isLowEnd ? 1.5 : 3.0} // Оптимизация для слабых устройств
           fogIntensity={3.0}
           decay={1.0}
           flowSpeed={0.2 + vaultOffset * 0.3}
@@ -82,8 +101,8 @@ function HeroScene() {
       >
         <Canvas
           camera={{ position: [0, 0, 8], fov: 50 }}
-          dpr={[1, 2]}
-          gl={{ antialias: true, alpha: true }}
+          dpr={isLowEnd ? [1, 1] : [1, 2]} // Ограничение DPR
+          gl={{ antialias: !isLowEnd, alpha: true }} // Отключение сглаживания
         >
           <CameraRig />
           <Grid
@@ -105,17 +124,24 @@ function HeroScene() {
       <Canvas
         className="absolute inset-0 z-20 pointer-events-none"
         camera={{ position: [0, 0, 8], fov: 50 }}
-        dpr={[1, 2]}
-        gl={{ antialias: true, alpha: true }}
+        dpr={isLowEnd ? [1, 1] : [1, 2]}
+        gl={{ antialias: !isLowEnd, alpha: true }}
       >
         <Suspense fallback={<SceneLoader />}>
           <Lights />
           <CameraRig />
           <Vault />
-          <EffectComposer>
-            <Bloom luminanceThreshold={0.2} luminanceSmoothing={0.9} height={300} intensity={0.5} />
-            <Vignette eskil={false} offset={0.1} darkness={0.8} />
-          </EffectComposer>
+          {!isLowEnd && (
+            <EffectComposer>
+              <Bloom
+                luminanceThreshold={0.2}
+                luminanceSmoothing={0.9}
+                height={300}
+                intensity={0.5}
+              />
+              <Vignette eskil={false} offset={0.1} darkness={0.8} />
+            </EffectComposer>
+          )}
         </Suspense>
       </Canvas>
     </div>

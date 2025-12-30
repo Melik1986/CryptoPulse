@@ -30,12 +30,6 @@ export function Vault() {
 
   // Находим части модели по именам
   const { leftPart, rightPart } = useMemo(() => {
-    // Debug: log all child names
-    console.log(
-      'Vault Model Children:',
-      clonedScene.children.map((c) => c.name),
-    );
-
     // Try to find by name, fallback to children index if names don't match
     let left = clonedScene.getObjectByName('Vault_Left');
     let right = clonedScene.getObjectByName('Vault_Right');
