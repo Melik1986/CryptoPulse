@@ -40,7 +40,7 @@ function HeroScene() {
 
   return (
     <div
-      className="h-screen w-full relative bg-[#0a0e1a]" // Убрал overflow-hidden
+      className="h-[calc(100svh-6rem)] w-full relative bg-[#0a0e1a]" // Убрал overflow-hidden
       id="vault-hero"
       style={
         {
@@ -59,7 +59,8 @@ function HeroScene() {
           verticalSizing={30.0}
           horizontalSizing={1.0}
           wispDensity={3.0}
-          fogIntensity={4.0}
+          fogIntensity={3.0}
+          decay={1.0}
           flowSpeed={0.2 + vaultOffset * 0.3}
           wispSpeed={10 + vaultOffset * 20}
           wispIntensity={4 + vaultOffset * 5}
