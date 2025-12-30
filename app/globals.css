@@ -156,7 +156,20 @@
   }
 
   .main-container {
-    @apply py-6 md:py-12 mx-auto px-4 sm:px-6 max-w-360 w-full space-y-6 md:space-y-6;
+    @apply mx-auto max-w-360 w-full space-y-6 md:space-y-6;
+    padding: calc(var(--spacing) * 4);
+  }
+
+  @media (min-width: 40rem) {
+    .main-container {
+      padding: calc(var(--spacing) * 6);
+    }
+  }
+
+  @media (min-width: 48rem) {
+    .main-container {
+      padding: calc(var(--spacing) * 6);
+    }
   }
 
   .badge {
