@@ -9,7 +9,7 @@
  */
 
 import { Canvas } from '@react-three/fiber';
-import { Suspense, useEffect, useState } from 'react';
+import { Suspense, useState } from 'react';
 import { Grid } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import { Vault } from './Vault';
@@ -52,7 +52,7 @@ function HeroScene() {
 
   const vaultOffset = useVaultStore((state) => state.vaultOffset);
   const mouse = useVaultStore((state) => state.mouse);
-  const [isLowEnd, setIsLowEnd] = useState(() => {
+  const [isLowEnd] = useState(() => {
     // Lazy initial state: выполняется только один раз при маунте
     if (typeof window !== 'undefined') {
       return isLowEndDevice();

@@ -323,6 +323,11 @@ export const LaserFlow: React.FC<Props> = ({
     });
     rendererRef.current = renderer;
 
+    // Сообщаем, что лазер инициализирован
+    if (window) {
+      window.dispatchEvent(new Event('laser-beam-ready'));
+    }
+
     baseDprRef.current = Math.min(dpr ?? (window.devicePixelRatio || 1), 2);
     currentDprRef.current = baseDprRef.current;
 
