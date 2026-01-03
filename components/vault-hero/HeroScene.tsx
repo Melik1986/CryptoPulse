@@ -10,14 +10,14 @@
 
 import { Canvas } from '@react-three/fiber';
 import { Suspense, useState } from 'react';
-import { Grid } from '@react-three/drei';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import { Vault } from './Vault';
 import { CameraRig } from './CameraRig';
 import { Lights } from './Lights';
 import { useVaultEvents } from '@/hooks/useVaultEvents';
 import { useVaultScroll } from '@/hooks/useVaultScroll';
-import LaserFlow from './LaserBeam';
+import { LaserFlow } from '@/components/vault-hero/LaserFlow';
+import { FittedGrid } from '@/components/vault-hero/FittedGrid';
 import { useVaultStore } from '@/lib/stores/vault-store';
 
 /** Простая проверка на производительность устройства */
@@ -60,9 +60,11 @@ function HeroScene() {
     return false;
   });
 
+  const FOG_OVERLAP = 64;
+
   return (
     <div
-      className="h-[calc(100svh-6rem)] w-full relative bg-[#0a0e1a]" // Убрал overflow-hidden
+      className="h-[calc(100svh-6rem)] w-full relative bg-[#0a0e1a]"
       id="vault-hero"
       style={
         {
@@ -71,81 +73,47 @@ function HeroScene() {
         } as React.CSSProperties
       }
     >
-      {/* Layer 0: Laser Flow (Opaque Background) - Extended downwards */}
-      <div className="absolute inset-x-0 top-0 -bottom-32 z-0 pointer-events-none">
-        {' '}
-        {/* bottom-32 (~128px) заходит на след. секцию */}
-        <LaserFlow
-          horizontalBeamOffset={0}
-          verticalBeamOffset={-0.3}
-          verticalSizing={30.0}
-          horizontalSizing={1.0}
-          wispDensity={isLowEnd ? 1.5 : 3.0} // Оптимизация для слабых устройств
-          fogIntensity={3.0}
-          decay={1.0}
-          flowSpeed={0.2 + vaultOffset * 0.3}
-          wispSpeed={10 + vaultOffset * 20}
-          wispIntensity={4 + vaultOffset * 5}
-          color="#FF79C6"
-          className="h-full w-full"
-        />
-      </div>
-
-      {/* Layer 1: Grid with Reveal Mask (Interactive Middle Layer) */}
       <div
-        className="absolute inset-0 z-10 pointer-events-none"
-        style={{
-          maskImage:
-            'radial-gradient(circle 300px at var(--mx) var(--my), black 0%, transparent 100%)',
-          WebkitMaskImage:
-            'radial-gradient(circle 300px at var(--mx) var(--my), black 0%, transparent 100%)',
-        }}
+        className="absolute left-0 top-0 right-0 pointer-events-none"
+        style={{ height: `calc(100% + ${FOG_OVERLAP}px)` }}
       >
         <Canvas
           camera={{ position: [0, 0, 8], fov: 50 }}
-          dpr={isLowEnd ? [1, 1] : [1, 2]} // Ограничение DPR
-          gl={{ antialias: !isLowEnd, alpha: true }} // Отключение сглаживания
+          dpr={isLowEnd ? [1, 1] : [1, 2]}
+          gl={{ antialias: !isLowEnd, alpha: true }}
         >
-          <CameraRig />
-          <Grid
-            args={[60, 60]}
-            cellColor="#888888"
-            sectionColor="#AAAAAA"
-            cellThickness={0.5}
-            sectionThickness={1}
-            position={[0, 0, -25]}
-            rotation={[Math.PI / 2, 0, 0]}
-            infiniteGrid={true}
-            fadeDistance={50}
-            fadeStrength={1.5}
-          />
+          <Suspense fallback={<SceneLoader />}>
+            <CameraRig />
+            <FittedGrid />
+            <LaserFlow
+              horizontalBeamOffset={0}
+              verticalBeamOffset={-0.3}
+              verticalSizing={30.0}
+              horizontalSizing={1.0}
+              wispDensity={isLowEnd ? 1.5 : 3.0}
+              fogIntensity={3.0}
+              decay={1.0}
+              flowSpeed={0.2 + vaultOffset * 0.3}
+              wispSpeed={10 + vaultOffset * 20}
+              wispIntensity={4 + vaultOffset * 5}
+              color="#FF79C6"
+            />
+            <Lights />
+            <Vault />
+            {!isLowEnd && (
+              <EffectComposer>
+                <Bloom
+                  luminanceThreshold={0.2}
+                  luminanceSmoothing={0.9}
+                  height={300}
+                  intensity={0.5}
+                />
+                <Vignette eskil={false} offset={0.1} darkness={0.8} />
+              </EffectComposer>
+            )}
+          </Suspense>
         </Canvas>
       </div>
-
-      {/* Layer 2: Foreground Vault (Always Visible) */}
-      <Canvas
-        className="absolute inset-0 z-20 pointer-events-none"
-        camera={{ position: [0, 0, 8], fov: 50 }}
-        dpr={isLowEnd ? [1, 1] : [1, 2]}
-        gl={{ antialias: !isLowEnd, alpha: true }}
-      >
-        <Suspense fallback={<SceneLoader />}>
-          <Lights />
-          <CameraRig />
-          <Vault />
-          {!isLowEnd && (
-            <EffectComposer>
-              <Bloom
-                luminanceThreshold={0.2}
-                luminanceSmoothing={0.9}
-                height={300}
-                intensity={0.5}
-              />
-              <Vignette eskil={false} offset={0.1} darkness={0.8} />
-            </EffectComposer>
-          )}
-        </Suspense>
-      </Canvas>
     </div>
   );
 }
