@@ -50,7 +50,6 @@ function HeroScene() {
   // ✅ Этап 5: Подключен useVaultScroll для обработки скролла
   useVaultScroll();
 
-  const vaultOffset = useVaultStore((state) => state.vaultOffset);
   const mouse = useVaultStore((state) => state.mouse);
   const [isLowEnd] = useState(() => {
     // Lazy initial state: выполняется только один раз при маунте

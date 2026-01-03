@@ -381,7 +381,7 @@ export function LaserFlow({
     falloffStart,
     fogFallSpeed,
     color,
-    uniformsForMaterial
+    uniformsForMaterial,
   ]);
 
   useEffect(() => {
