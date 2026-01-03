@@ -13,11 +13,11 @@ const Page = async () => {
   return (
     <main className="main-container">
       {/* Hero Section с 3D Vault */}
-      <section className="w-full">
+      <section className="w-full mb-24">
         <HeroScene />
       </section>
 
-      <section className="home-grid">
+      <section className="home-grid mt-[-3rem]">
         <Suspense fallback={<CoinOverviewFallback />}>
           <CoinOverview />
         </Suspense>
