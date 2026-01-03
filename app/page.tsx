@@ -17,7 +17,7 @@ const Page = async () => {
         <HeroScene />
       </section>
 
-      <section className="home-grid mt-[-3rem]">
+      <section className="home-grid mt-[-1.9rem]">
         <Suspense fallback={<CoinOverviewFallback />}>
           <CoinOverview />
         </Suspense>

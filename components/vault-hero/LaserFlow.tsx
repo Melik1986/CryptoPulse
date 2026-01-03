@@ -111,8 +111,10 @@ uniform float uFade;
 #define HFOG_EDGE_START 0.20
 #define HFOG_EDGE_END 0.98
 #define HFOG_EDGE_GAMMA 1.4
-#define HFOG_Y_RADIUS 25.0
-#define HFOG_Y_SOFT 60.0
+#define HFOG_Y_RADIUS 15.0
+#define HFOG_Y_SOFT 40.0
+#define HFOG_Y_RADIUS_BOT 1.5
+#define HFOG_Y_SOFT_BOT 15.0
 #define EDGE_X0 0.22
 #define EDGE_X1 0.995
 #define EDGE_X_GAMMA 1.25
@@ -225,13 +227,15 @@ void mainImage(out vec4 fc,in vec2 frag){
 #endif
   float m0=pow(smoothstep(FOG_BEAM_MIN - wL, FOG_BEAM_MAX + wL, L),FOG_MASK_GAMMA);
   float bm=1.0-pow(1.0-m0,FOG_EXPAND_SHAPE); bm=mix(bm*m0,bm,FOG_EDGE_MIX);
-  float yP=1.0-smoothstep(HFOG_Y_RADIUS,HFOG_Y_RADIUS+HFOG_Y_SOFT,abs(yPix));
+  float rY = mix(HFOG_Y_RADIUS_BOT, HFOG_Y_RADIUS, step(0.0, yPix));
+  float sY = mix(HFOG_Y_SOFT_BOT, HFOG_Y_SOFT, step(0.0, yPix));
+  float yP=1.0-smoothstep(rY,rY+sY,abs(yPix));
   float nxF=abs((frag.x-C.x)*invW),hE=1.0-smoothstep(HFOG_EDGE_START,HFOG_EDGE_END,nxF); hE=pow(clamp(hE,0.0,1.0),HFOG_EDGE_GAMMA);
   float hW=mix(1.0,hE,clamp(yP,0.0,1.0));
   float bBias=mix(1.0,1.0-sPix,FOG_BOTTOM_BIAS);
   float browserFogIntensity = uFogIntensity;
   browserFogIntensity *= 1.8;
-  float radialFade = 1.0 - smoothstep(0.0, 0.7, length(uvc) / 120.0);
+  float radialFade = 1.0 - smoothstep(0.0, 0.7, length(uvc) / 90.0);
   float safariFog = n * browserFogIntensity * bBias * bm * hW * radialFade;
   fog = safariFog;
 #endif
@@ -243,7 +247,16 @@ void mainImage(out vec4 fc,in vec2 frag){
   float nxE=abs((frag.x-C.x)*invW),xF=pow(clamp(1.0-smoothstep(EDGE_X0,EDGE_X1,nxE),0.0,1.0),EDGE_X_GAMMA);
   float scene=LF+max(0.0,w)*0.5,hi=smoothstep(EDGE_LUMA_T0,EDGE_LUMA_T1,scene);
   float eM=mix(xF,1.0,hi);
-  col*=eM; alpha*=eM;
+  
+  // BOTTOM SAFETY MASK:
+  // Preserves the top beam completely (yPix > 0).
+  // Smoothly fades out ONLY the bottom part before it hits the screen edge (~23.0 units).
+  float distDown = max(0.0, -yPix);
+  float bottomMask = 1.0 - smoothstep(12.0, 22.5, distDown);
+  
+  col *= eM * bottomMask;
+  alpha *= eM * bottomMask;
+  
   col*=uFade; alpha*=uFade;
   fc=vec4(col,alpha);
 }

@@ -63,15 +63,24 @@ function HeroScene() {
 
   return (
     <div
-      className="h-[calc(100svh-6rem)] w-full relative bg-[#0a0e1a]"
+      className="h-[calc(100svh-6rem)] w-full relative"
       id="vault-hero"
       style={
         {
           '--mx': `${(mouse.x + 1) * 50}%`,
           '--my': `${(1 - mouse.y) * 50}%`,
+          maskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)',
+          WebkitMaskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)',
         } as React.CSSProperties
       }
     >
+      {/* Background color matching the page body */}
+      <div
+        className="absolute inset-0 z-[-1]"
+        style={{
+          background: '#0f1316',
+        }}
+      />
       <div
         className="absolute left-0 top-0 right-0 pointer-events-none"
         style={{ height: `calc(100% + ${FOG_OVERLAP}px)` }}
