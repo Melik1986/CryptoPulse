@@ -93,9 +93,9 @@ function HeroScene() {
               wispDensity={isLowEnd ? 1.5 : 3.0}
               fogIntensity={3.0}
               decay={1.0}
-              flowSpeed={0.2 + vaultOffset * 0.3}
-              wispSpeed={10 + vaultOffset * 20}
-              wispIntensity={4 + vaultOffset * 5}
+              flowSpeed={0.2}
+              wispSpeed={10}
+              wispIntensity={4}
               color="#FF79C6"
             />
             <Lights />

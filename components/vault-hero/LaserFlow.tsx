@@ -3,7 +3,7 @@
 import { useRef, useEffect, useMemo } from 'react';
 import { useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
-import { useVaultMouse } from '@/lib/stores/vault-store';
+import { useVaultMouse, useVaultStore } from '@/lib/stores/vault-store';
 
 type Props = {
   className?: string;
@@ -345,11 +345,6 @@ export function LaserFlow({
 
   useEffect(() => {
     uniformsRef.current = uniformsForMaterial;
-    const { r, g, b } = hexToRGB(color);
-    uniformsForMaterial.uColor.value.set(r, g, b);
-  }, [uniformsForMaterial, color]);
-
-  useEffect(() => {
     if (!uniformsRef.current) return;
     const uniforms = uniformsRef.current;
     uniforms.uWispDensity.value = wispDensity;
@@ -386,6 +381,7 @@ export function LaserFlow({
     falloffStart,
     fogFallSpeed,
     color,
+    uniformsForMaterial
   ]);
 
   useEffect(() => {
@@ -401,6 +397,11 @@ export function LaserFlow({
     const dt = delta;
     const uniforms = uniformsRef.current;
     const cdt = Math.min(0.033, Math.max(0.001, dt));
+
+    const scroll = useVaultStore.getState().vaultOffset || 0;
+    uniforms.uFlowSpeed.value = flowSpeed + scroll * 1.5;
+    uniforms.uWSpeed.value = wispSpeed + scroll * 20.0;
+
     uniforms.iTime.value = t;
     flowTimeRef.current += cdt;
     fogTimeRef.current += cdt;
