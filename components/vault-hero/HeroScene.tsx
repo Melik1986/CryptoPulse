@@ -125,11 +125,13 @@ function HeroScene() {
               verticalSizing={30.0}
               horizontalSizing={1.0}
               wispDensity={isLowEnd ? 1.5 : 3.0}
-              fogIntensity={3.0}
+              fogIntensity={1.5}
+              fogScale={0.5}
               decay={1.0}
               flowSpeed={0.2}
-              wispSpeed={10}
-              wispIntensity={4}
+              wispSpeed={15}
+              wispIntensity={2.5}
+              mouseTiltStrength={0.12}
               color="#FF79C6"
             />
             <Lights />

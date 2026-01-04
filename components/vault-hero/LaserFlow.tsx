@@ -111,8 +111,8 @@ uniform float uFade;
 #define HFOG_EDGE_START 0.20
 #define HFOG_EDGE_END 0.98
 #define HFOG_EDGE_GAMMA 1.4
-#define HFOG_Y_RADIUS 15.0
-#define HFOG_Y_SOFT 40.0
+#define HFOG_Y_RADIUS 10.0
+#define HFOG_Y_SOFT 20.0
 #define HFOG_Y_RADIUS_BOT 1.5
 #define HFOG_Y_SOFT_BOT 15.0
 #define EDGE_X0 0.22
@@ -438,6 +438,30 @@ export function LaserFlow({
     mouseTargetRef.current.set(x, y);
     mouseSmoothRef.current.lerp(mouseTargetRef.current, alpha);
     uniforms.iMouse.value.set(mouseSmoothRef.current.x, mouseSmoothRef.current.y, 0, 0);
+
+    // Dynamic Fog Control: Gather/Dim when cursor approaches beam center
+    // We approximate beam center as horizontal line at y = heightPx * (1.0 + verticalBeamOffset?)
+    // But beam offset is complex. Let's use distance from screen center for simplicity, or relative to beam offset.
+    // The shader uses uBeamYFrac.
+    // const beamY = heightPx * (1.0 - (0.5 + verticalBeamOffset)); // Approximate Y in pixels from bottom?
+    // Actually simpler: mouse.y is in [-1, 1]. Center is 0.
+    // Let's use normalized mouse Y distance from center (0).
+    const distY = Math.abs(mouse.y); // 0 at center, 1 at edges.
+
+    // Logic:
+    // Mouse close to center (distY -> 0) => Fog gathers (intensity drops, maybe size drops).
+    // Mouse far (distY -> 1) => Fog spreads (normal intensity).
+
+    // We want "intensity drops" when cursor approaches.
+    // Base intensity is `fogIntensity`.
+    // Modulator: 0.2 (dim) to 1.0 (full) based on distY.
+    const proximity = Math.max(0, Math.min(1, distY / 0.5)); // Full effect within 0.5 unit radius
+    const dynamicIntensity = fogIntensity * (0.3 + 0.7 * proximity); // Drops to 30% at center
+
+    uniforms.uFogIntensity.value = dynamicIntensity;
+
+    // Also modulate wisp intensity slightly to match "laser goes out"
+    uniforms.uWIntensity.value = wispIntensity * (0.5 + 0.5 * proximity);
   });
 
   const planeSize = useMemo<[number, number]>(() => {
