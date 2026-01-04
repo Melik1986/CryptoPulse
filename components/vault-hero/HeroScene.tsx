@@ -68,16 +68,21 @@ function HeroScene() {
 
   return (
     <div
-      className="h-[calc(100svh-6rem)] w-full relative"
-      id="vault-hero"
-      style={
-        {
-          '--mx': `${(mouse.x + 1) * 50}%`,
-          '--my': `${(1 - mouse.y) * 50}%`,
-        } as React.CSSProperties
-      }
+      className="relative w-full overflow-visible"
+      style={{ height: '300vh' }}
+      id="vault-hero-track"
     >
-      {/* Background color matching the page body */}
+      <div
+        className="sticky top-0 h-screen w-full overflow-visible"
+        id="vault-hero"
+        style={
+          {
+            '--mx': `${(mouse.x + 1) * 50}%`,
+            '--my': `${(1 - mouse.y) * 50}%`,
+          } as React.CSSProperties
+        }
+      >
+        {/* Background color matching the page body */}
       <div
         className="absolute inset-0 z-[-1]"
         style={{
@@ -187,6 +192,7 @@ function HeroScene() {
           </Suspense>
         </Canvas>
       </div>
+    </div>
     </div>
   );
 }

@@ -15,20 +15,40 @@ export function useVaultScroll() {
 
   useEffect(() => {
     const handleScroll = () => {
-      const scrollHeight = window.innerHeight;
-      const currentScroll = window.scrollY;
+      const track = document.getElementById('vault-hero-track');
+      if (!track) {
+        // Fallback if track not found (e.g. during initial render or if layout changed)
+        return;
+      }
 
-      const progress = Math.min(Math.max(currentScroll / scrollHeight, 0), 1);
+      const rect = track.getBoundingClientRect();
+      const viewportHeight = window.innerHeight;
+      const trackHeight = track.offsetHeight;
+
+      // Distance available for scrolling while the inner content is sticky
+      // (Total Height - Viewport Height)
+      const scrollableDistance = trackHeight - viewportHeight;
+
+      if (scrollableDistance <= 0) return;
+
+      // rect.top goes from 0 down to -scrollableDistance as we scroll down.
+      // We invert it to get positive progress.
+      const currentScroll = -rect.top;
+
+      const progress = Math.min(Math.max(currentScroll / scrollableDistance, 0), 1);
 
       setScrollProgress(progress);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });
+    // Also listen to resize to update calculations
+    window.addEventListener('resize', handleScroll, { passive: true });
 
     handleScroll();
 
     return () => {
       window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
     };
   }, [setScrollProgress]);
 }

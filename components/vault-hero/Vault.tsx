@@ -11,7 +11,7 @@
 import { useRef, useMemo } from 'react';
 import { useFrame } from '@react-three/fiber';
 import { useGLTF } from '@react-three/drei';
-import { useVaultOffset } from '@/lib/stores/vault-store';
+import { useVaultScrollProgress } from '@/lib/stores/vault-store';
 import * as THREE from 'three';
 
 // Загрузка GLB модели
@@ -22,8 +22,8 @@ export function Vault() {
   const { scene } = useGLTF('/model/Vault.glb');
   const vaultRef = useRef<THREE.Group>(null);
 
-  // ✅ Этап 2: Подключен useVaultStore
-  const vaultOffset = useVaultOffset();
+  // Получаем прогресс скролла (0..1)
+  const scrollProgress = useVaultScrollProgress();
 
   // Клонируем сцену один раз при монтировании
   const clonedScene = useMemo(() => scene.clone(), [scene]);
@@ -64,6 +64,29 @@ export function Vault() {
       // Если часть справа (x > 0) -> двигаем вправо (+ offset)
       // Если x = 0, используем fallback: leftPart -> влево, rightPart -> вправо
 
+      // --- Timeline Logic ---
+      let currentOffset = 0;
+      let parallaxY = 0;
+
+      if (scrollProgress < 0.3) {
+        // 0.0 -> 0.3 : Opening (0 -> 1)
+        currentOffset = scrollProgress / 0.3;
+      } else if (scrollProgress < 0.6) {
+        // 0.3 -> 0.6 : Hold (1)
+        currentOffset = 1;
+      } else if (scrollProgress < 0.9) {
+        // 0.6 -> 0.9 : Closing (1 -> 0)
+        currentOffset = 1 - (scrollProgress - 0.6) / 0.3;
+      } else {
+        // 0.9 -> 1.0 : Closed (0) + Parallax Exit
+        currentOffset = 0;
+        // Parallax: 0 -> 1 mapped to 0 -> 8 units up (Reduced from 15)
+        parallaxY = ((scrollProgress - 0.9) / 0.1) * 8;
+      }
+
+      // Clamp values just in case
+      currentOffset = Math.max(0, Math.min(1, currentOffset));
+
       const leftDir =
         initialPositions.current.left !== 0 ? Math.sign(initialPositions.current.left) : -1;
 
@@ -71,17 +94,21 @@ export function Vault() {
         initialPositions.current.right !== 0 ? Math.sign(initialPositions.current.right) : 1;
 
       // Коэффициент 2.5 определяет ширину открытия
-      const targetLeftX = initialPositions.current.left + leftDir * vaultOffset * 2.5;
-      const targetRightX = initialPositions.current.right + rightDir * vaultOffset * 2.5;
+      const targetLeftX = initialPositions.current.left + leftDir * currentOffset * 2.5;
+      const targetRightX = initialPositions.current.right + rightDir * currentOffset * 2.5;
 
-      // Плавная интерполяция
-      // Note: Direct mutation of three.js objects in useFrame is the recommended way for performance.
-      // We are suppressing the exhaustive-deps warning because we intentionally want this to run every frame
-      // without re-triggering based on dependencies that might cause re-renders.
+      // Плавная интерполяция X (двери)
       // eslint-disable-next-line react-hooks/immutability
       leftPart.position.x = THREE.MathUtils.lerp(leftPart.position.x, targetLeftX, 0.1);
       // eslint-disable-next-line react-hooks/immutability
       rightPart.position.x = THREE.MathUtils.lerp(rightPart.position.x, targetRightX, 0.1);
+
+      // Плавная интерполяция Y (параллакс уход вверх)
+      if (vaultRef.current) {
+        const targetY = -2.5 + parallaxY; // -2.5 is initial Y
+        // eslint-disable-next-line react-hooks/immutability
+        vaultRef.current.position.y = THREE.MathUtils.lerp(vaultRef.current.position.y, targetY, 0.1);
+      }
     }
   });
 

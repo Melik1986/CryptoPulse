@@ -19,8 +19,8 @@ export function CameraRig() {
 
   /* eslint-disable react-hooks/immutability -- R3F стандартный паттерн: мутация camera в useFrame */
   useFrame(() => {
-    const targetX = mouse.x * 0.5;
-    const targetY = mouse.y * 0.3;
+    const targetX = mouse.x * 1.5;
+    const targetY = mouse.y * 1.0;
 
     camera.position.x = THREE.MathUtils.lerp(camera.position.x, targetX, 0.05);
     camera.position.y = THREE.MathUtils.lerp(camera.position.y, targetY, 0.05);
