@@ -110,9 +110,9 @@ function HeroScene() {
         />
 
         {/* Logo Layer - Column Layout: Icon Top, Text Bottom */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center gap-9 opacity-20 select-none">
+        <div className="absolute inset-0 flex flex-col items-center justify-center opacity-20 select-none">
           {/* Icon - Left part of SVG */}
-          <div className="w-[24rem] h-[24rem] relative overflow-hidden shrink-0">
+          <div className="w-[23rem] h-[23rem] relative overflow-hidden shrink-0">
             <Image
               src="/logo.svg"
               alt="CoinPulse Icon"
