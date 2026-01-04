@@ -13,4 +13,3 @@ export { Vault } from './Vault';
 export { CameraRig } from './CameraRig';
 export { Lights } from './Lights';
 export { LaserFlow } from './LaserFlow';
-export { FittedGrid } from './FittedGrid';

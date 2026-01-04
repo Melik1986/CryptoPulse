@@ -30,6 +30,12 @@ export const useVaultStore = create<VaultStore>()(
       mouse: { x: 0, y: 0 },
       scrollProgress: 0,
       isAnimating: false,
+      flashlight: {
+        enabled: true,
+        radius: 300,
+        opacity: 0.9,
+        sharpness: 0.5,
+      },
 
       // ============================================
       // Actions
@@ -89,6 +95,19 @@ export const useVaultStore = create<VaultStore>()(
       },
 
       /**
+       * Обновляет конфигурацию эффекта фонарика
+       */
+      setFlashlight: (config) => {
+        set(
+          (state) => ({
+            flashlight: { ...state.flashlight, ...config },
+          }),
+          false,
+          'setFlashlight',
+        );
+      },
+
+      /**
        * Сбрасывает состояние в начальное значение
        */
       reset: () => {
@@ -98,6 +117,12 @@ export const useVaultStore = create<VaultStore>()(
             mouse: { x: 0, y: 0 },
             scrollProgress: 0,
             isAnimating: false,
+            flashlight: {
+              enabled: true,
+              radius: 300,
+              opacity: 0.9,
+              sharpness: 0.5,
+            },
           },
           false,
           'reset',

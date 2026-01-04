@@ -17,7 +17,7 @@ import { Lights } from './Lights';
 import { useVaultEvents } from '@/hooks/useVaultEvents';
 import { useVaultScroll } from '@/hooks/useVaultScroll';
 import { LaserFlow } from '@/components/vault-hero/LaserFlow';
-import { FittedGrid } from '@/components/vault-hero/FittedGrid';
+// import { FittedGrid } from '@/components/vault-hero/FittedGrid';
 import { useVaultStore } from '@/lib/stores/vault-store';
 
 /** Простая проверка на производительность устройства */
@@ -51,6 +51,10 @@ function HeroScene() {
   useVaultScroll();
 
   const mouse = useVaultStore((state) => state.mouse);
+  const flashlight = useVaultStore(
+    (state) => state.flashlight || { enabled: false, radius: 300, opacity: 0.9, sharpness: 0.5 },
+  );
+
   const [isLowEnd] = useState(() => {
     // Lazy initial state: выполняется только один раз при маунте
     if (typeof window !== 'undefined') {
@@ -59,7 +63,7 @@ function HeroScene() {
     return false;
   });
 
-  const FOG_OVERLAP = 64;
+  const FOG_OVERLAP = 40;
 
   return (
     <div
@@ -79,10 +83,30 @@ function HeroScene() {
           background: '#0f1316',
         }}
       />
+
+      {/* Background Grid with Flashlight Reveal */}
+      <div
+        className="absolute inset-0 z-0 opacity-20 pointer-events-none"
+        style={{
+          backgroundImage: `
+            linear-gradient(to right, #444 1px, transparent 1px),
+            linear-gradient(to bottom, #444 1px, transparent 1px)
+          `,
+          backgroundSize: '40px 40px',
+          maskImage: flashlight.enabled
+            ? `radial-gradient(circle ${flashlight.radius * 1.5}px at var(--mx) var(--my), black 0%, transparent 100%)`
+            : undefined,
+          WebkitMaskImage: flashlight.enabled
+            ? `radial-gradient(circle ${flashlight.radius * 1.5}px at var(--mx) var(--my), black 0%, transparent 100%)`
+            : undefined,
+        }}
+      />
+
       <div
         className="absolute left-0 top-0 right-0 pointer-events-none z-10"
         style={{
           height: `calc(100% + ${FOG_OVERLAP}px)`,
+          // Outer Mask: Bottom Fade (hides the seam)
           maskImage: `linear-gradient(to bottom, black calc(100% - ${FOG_OVERLAP}px), transparent 100%)`,
           WebkitMaskImage: `linear-gradient(to bottom, black calc(100% - ${FOG_OVERLAP}px), transparent 100%)`,
         }}
@@ -94,7 +118,7 @@ function HeroScene() {
         >
           <Suspense fallback={<SceneLoader />}>
             <CameraRig />
-            <FittedGrid />
+            {/* <FittedGrid /> - Replaced by CSS Grid behind Canvas */}
             <LaserFlow
               horizontalBeamOffset={0}
               verticalBeamOffset={-0.3}

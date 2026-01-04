@@ -346,6 +346,13 @@ interface VaultState {
   scrollProgress: number;
   /** Флаг активности анимации */
   isAnimating: boolean;
+  /** Конфигурация эффекта фонарика */
+  flashlight: {
+    enabled: boolean;
+    radius: number;
+    opacity: number;
+    sharpness: number;
+  };
 }
 
 /**
@@ -356,5 +363,6 @@ interface VaultActions {
   setMouse: (x: number, y: number) => void;
   setScrollProgress: (progress: number) => void;
   setIsAnimating: (isAnimating: boolean) => void;
+  setFlashlight: (config: Partial<VaultState['flashlight']>) => void;
   reset: () => void;
 }
