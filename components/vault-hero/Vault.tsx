@@ -106,8 +106,11 @@ export function Vault() {
       // Плавная интерполяция Y (параллакс уход вверх)
       if (vaultRef.current) {
         const targetY = -2.5 + parallaxY; // -2.5 is initial Y
-        // eslint-disable-next-line react-hooks/immutability
-        vaultRef.current.position.y = THREE.MathUtils.lerp(vaultRef.current.position.y, targetY, 0.1);
+        vaultRef.current.position.y = THREE.MathUtils.lerp(
+          vaultRef.current.position.y,
+          targetY,
+          0.1,
+        );
       }
     }
   });

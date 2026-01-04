@@ -83,116 +83,116 @@ function HeroScene() {
         }
       >
         {/* Background color matching the page body */}
-      <div
-        className="absolute inset-0 z-[-1]"
-        style={{
-          background: '#0f1316',
-        }}
-      />
-
-      {/* Background Container with Flashlight Reveal Mask */}
-      <div
-        className="absolute inset-0 z-0 pointer-events-none overflow-hidden"
-        style={{
-          maskImage: flashlight.enabled
-            ? `radial-gradient(circle ${flashlight.radius * 1.5}px at var(--mx) var(--my), black 0%, transparent 100%)`
-            : undefined,
-          WebkitMaskImage: flashlight.enabled
-            ? `radial-gradient(circle ${flashlight.radius * 1.5}px at var(--mx) var(--my), black 0%, transparent 100%)`
-            : undefined,
-        }}
-      >
-        {/* Grid Pattern */}
         <div
-          className="absolute inset-0 opacity-20"
+          className="absolute inset-0 z-[-1]"
           style={{
-            backgroundImage: `
-              linear-gradient(to right, #444 1px, transparent 1px),
-              linear-gradient(to bottom, #444 1px, transparent 1px)
-            `,
-            backgroundSize: '40px 40px',
+            background: '#0f1316',
           }}
         />
 
-        {/* Logo Layer - Column Layout: Icon Top, Text Bottom */}
-        <div className="absolute inset-0 flex flex-col items-center justify-center opacity-20 select-none">
-          {/* Icon - Left part of SVG */}
-          <div className="w-[23rem] h-[23rem] relative overflow-hidden shrink-0">
-            <Image
-              src="/logo.svg"
-              alt="CoinPulse Icon"
-              fill
-              className="object-cover object-left"
-              priority
-              style={{ filter: 'sepia(100%) hue-rotate(100deg) saturate(500%)' }}
-            />
-          </div>
-
-          {/* Text - Right part of SVG */}
+        {/* Background Container with Flashlight Reveal Mask */}
+        <div
+          className="absolute inset-0 z-0 pointer-events-none overflow-hidden"
+          style={{
+            maskImage: flashlight.enabled
+              ? `radial-gradient(circle ${flashlight.radius * 1.5}px at var(--mx) var(--my), black 0%, transparent 100%)`
+              : undefined,
+            WebkitMaskImage: flashlight.enabled
+              ? `radial-gradient(circle ${flashlight.radius * 1.5}px at var(--mx) var(--my), black 0%, transparent 100%)`
+              : undefined,
+          }}
+        >
+          {/* Grid Pattern */}
           <div
-            className="h-[23.75rem] mb-[2.5rem] relative overflow-hidden shrink-0"
-            style={{ aspectRatio: '86/30' }}
-          >
-            <Image
-              src="/logo.svg"
-              alt="CoinPulse Text"
-              fill
-              className="object-cover object-right"
-              priority
-            />
+            className="absolute inset-0 opacity-20"
+            style={{
+              backgroundImage: `
+              linear-gradient(to right, #444 1px, transparent 1px),
+              linear-gradient(to bottom, #444 1px, transparent 1px)
+            `,
+              backgroundSize: '40px 40px',
+            }}
+          />
+
+          {/* Logo Layer - Column Layout: Icon Top, Text Bottom */}
+          <div className="absolute inset-0 flex flex-col items-center justify-center opacity-20 select-none">
+            {/* Icon - Left part of SVG */}
+            <div className="w-[23rem] h-[23rem] relative overflow-hidden shrink-0">
+              <Image
+                src="/logo.svg"
+                alt="CoinPulse Icon"
+                fill
+                className="object-cover object-left"
+                priority
+                style={{ filter: 'sepia(100%) hue-rotate(100deg) saturate(500%)' }}
+              />
+            </div>
+
+            {/* Text - Right part of SVG */}
+            <div
+              className="h-[23.75rem] mb-[2.5rem] relative overflow-hidden shrink-0"
+              style={{ aspectRatio: '86/30' }}
+            >
+              <Image
+                src="/logo.svg"
+                alt="CoinPulse Text"
+                fill
+                className="object-cover object-right"
+                priority
+              />
+            </div>
           </div>
         </div>
-      </div>
 
-      <div
-        className="absolute left-0 top-0 right-0 pointer-events-none z-10"
-        style={{
-          height: `calc(100% + ${FOG_OVERLAP}px)`,
-          // Outer Mask: Bottom Fade (hides the seam)
-          maskImage: `linear-gradient(to bottom, black calc(100% - ${FOG_OVERLAP}px), transparent 100%)`,
-          WebkitMaskImage: `linear-gradient(to bottom, black calc(100% - ${FOG_OVERLAP}px), transparent 100%)`,
-        }}
-      >
-        <Canvas
-          camera={{ position: [0, 0, 8], fov: 50 }}
-          dpr={isLowEnd ? [1, 1] : [1, 2]}
-          gl={{ antialias: !isLowEnd, alpha: true }}
+        <div
+          className="absolute left-0 top-0 right-0 pointer-events-none z-10"
+          style={{
+            height: `calc(100% + ${FOG_OVERLAP}px)`,
+            // Outer Mask: Bottom Fade (hides the seam)
+            maskImage: `linear-gradient(to bottom, black calc(100% - ${FOG_OVERLAP}px), transparent 100%)`,
+            WebkitMaskImage: `linear-gradient(to bottom, black calc(100% - ${FOG_OVERLAP}px), transparent 100%)`,
+          }}
         >
-          <Suspense fallback={<SceneLoader />}>
-            <CameraRig />
-            {/* <FittedGrid /> - Replaced by CSS Grid behind Canvas */}
-            <LaserFlow
-              horizontalBeamOffset={0}
-              verticalBeamOffset={-0.3}
-              verticalSizing={30.0}
-              horizontalSizing={1.0}
-              wispDensity={isLowEnd ? 1.5 : 3.0}
-              fogIntensity={1.5}
-              fogScale={0.5}
-              decay={1.0}
-              flowSpeed={0.2}
-              wispSpeed={15}
-              wispIntensity={2.5}
-              mouseTiltStrength={0.12}
-              color="#FF79C6"
-            />
-            <Lights />
-            <Vault />
-            {!isLowEnd && (
-              <EffectComposer>
-                <Bloom
-                  luminanceThreshold={0.2}
-                  luminanceSmoothing={0.9}
-                  height={300}
-                  intensity={0.5}
-                />
-                <Vignette eskil={false} offset={0.1} darkness={0.8} />
-              </EffectComposer>
-            )}
-          </Suspense>
-        </Canvas>
+          <Canvas
+            camera={{ position: [0, 0, 8], fov: 50 }}
+            dpr={isLowEnd ? [1, 1] : [1, 2]}
+            gl={{ antialias: !isLowEnd, alpha: true }}
+          >
+            <Suspense fallback={<SceneLoader />}>
+              <CameraRig />
+              {/* <FittedGrid /> - Replaced by CSS Grid behind Canvas */}
+              <LaserFlow
+                horizontalBeamOffset={0}
+                verticalBeamOffset={-0.3}
+                verticalSizing={30.0}
+                horizontalSizing={1.0}
+                wispDensity={isLowEnd ? 1.5 : 3.0}
+                fogIntensity={1.5}
+                fogScale={0.5}
+                decay={1.0}
+                flowSpeed={0.2}
+                wispSpeed={15}
+                wispIntensity={2.5}
+                mouseTiltStrength={0.12}
+                color="#FF79C6"
+              />
+              <Lights />
+              <Vault />
+              {!isLowEnd && (
+                <EffectComposer>
+                  <Bloom
+                    luminanceThreshold={0.2}
+                    luminanceSmoothing={0.9}
+                    height={300}
+                    intensity={0.5}
+                  />
+                  <Vignette eskil={false} offset={0.1} darkness={0.8} />
+                </EffectComposer>
+              )}
+            </Suspense>
+          </Canvas>
+        </div>
       </div>
-    </div>
     </div>
   );
 }
