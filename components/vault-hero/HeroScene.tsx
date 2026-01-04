@@ -10,6 +10,7 @@
 
 import { Canvas } from '@react-three/fiber';
 import { Suspense, useState } from 'react';
+import Image from 'next/image';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import { Vault } from './Vault';
 import { CameraRig } from './CameraRig';
@@ -84,15 +85,10 @@ function HeroScene() {
         }}
       />
 
-      {/* Background Grid with Flashlight Reveal */}
+      {/* Background Container with Flashlight Reveal Mask */}
       <div
-        className="absolute inset-0 z-0 opacity-20 pointer-events-none"
+        className="absolute inset-0 z-0 pointer-events-none overflow-hidden"
         style={{
-          backgroundImage: `
-            linear-gradient(to right, #444 1px, transparent 1px),
-            linear-gradient(to bottom, #444 1px, transparent 1px)
-          `,
-          backgroundSize: '40px 40px',
           maskImage: flashlight.enabled
             ? `radial-gradient(circle ${flashlight.radius * 1.5}px at var(--mx) var(--my), black 0%, transparent 100%)`
             : undefined,
@@ -100,7 +96,48 @@ function HeroScene() {
             ? `radial-gradient(circle ${flashlight.radius * 1.5}px at var(--mx) var(--my), black 0%, transparent 100%)`
             : undefined,
         }}
-      />
+      >
+        {/* Grid Pattern */}
+        <div
+          className="absolute inset-0 opacity-20"
+          style={{
+            backgroundImage: `
+              linear-gradient(to right, #444 1px, transparent 1px),
+              linear-gradient(to bottom, #444 1px, transparent 1px)
+            `,
+            backgroundSize: '40px 40px',
+          }}
+        />
+
+        {/* Logo Layer - Column Layout: Icon Top, Text Bottom */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center gap-9 opacity-20 select-none">
+          {/* Icon - Left part of SVG */}
+          <div className="w-[24rem] h-[24rem] relative overflow-hidden shrink-0">
+            <Image
+              src="/logo.svg"
+              alt="CoinPulse Icon"
+              fill
+              className="object-cover object-left"
+              priority
+              style={{ filter: 'sepia(100%) hue-rotate(100deg) saturate(500%)' }}
+            />
+          </div>
+
+          {/* Text - Right part of SVG */}
+          <div
+            className="h-[23.75rem] mb-[2.5rem] relative overflow-hidden shrink-0"
+            style={{ aspectRatio: '86/30' }}
+          >
+            <Image
+              src="/logo.svg"
+              alt="CoinPulse Text"
+              fill
+              className="object-cover object-right"
+              priority
+            />
+          </div>
+        </div>
+      </div>
 
       <div
         className="absolute left-0 top-0 right-0 pointer-events-none z-10"
