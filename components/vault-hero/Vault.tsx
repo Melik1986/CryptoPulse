@@ -25,8 +25,45 @@ export function Vault() {
   // Получаем прогресс скролла (0..1)
   const scrollProgress = useVaultScrollProgress();
 
-  // Клонируем сцену один раз при монтировании
-  const clonedScene = useMemo(() => scene.clone(), [scene]);
+  // Клонируем сцену один раз при монтировании и применяем материал
+  const clonedScene = useMemo(() => {
+    const clone = scene.clone();
+
+    // Новый материал: Графит/Обсидиан
+    const vaultMaterial = new THREE.MeshPhysicalMaterial({
+      // Цвет: Глубокий индиго-черный
+      color: new THREE.Color('#050508'), // База почти черная
+      emissive: new THREE.Color('#0a0a15'), // Едва заметное собственное свечение индиго
+      emissiveIntensity: 0.1,
+
+      // Фактура "Метаматериала"
+      metalness: 0.9, // Почти полный металл
+      roughness: 0.7, // Высокая шероховатость (графит/матовость)
+
+      // Детализация поверхности (Micro-surface)
+      clearcoat: 0.3, // Тонкий слой лака (как на обсидиане)
+      clearcoatRoughness: 0.4, // Лак тоже слегка матовый
+
+      // Отражения
+      reflectivity: 0.2, // Низкая отражающая способность (поглощение света)
+
+      // Геометрия
+      flatShading: false, // Гладкое затенение
+      side: THREE.DoubleSide, // Рендерить обе стороны граней (фикс прозрачности)
+    });
+
+    // Применяем материал ко всем мешам
+    clone.traverse((child) => {
+      if ((child as THREE.Mesh).isMesh) {
+        const mesh = child as THREE.Mesh;
+        mesh.material = vaultMaterial;
+        mesh.castShadow = true;
+        mesh.receiveShadow = true;
+      }
+    });
+
+    return clone;
+  }, [scene]);
 
   // Находим части модели по именам
   const { leftPart, rightPart } = useMemo(() => {
