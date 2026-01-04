@@ -81,7 +81,7 @@ function HeroScene() {
       />
       <div
         className="absolute left-0 top-0 right-0 pointer-events-none z-10"
-        style={{ 
+        style={{
           height: `calc(100% + ${FOG_OVERLAP}px)`,
           maskImage: `linear-gradient(to bottom, black calc(100% - ${FOG_OVERLAP}px), transparent 100%)`,
           WebkitMaskImage: `linear-gradient(to bottom, black calc(100% - ${FOG_OVERLAP}px), transparent 100%)`,
