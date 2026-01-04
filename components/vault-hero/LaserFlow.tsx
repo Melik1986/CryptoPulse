@@ -250,11 +250,12 @@ void mainImage(out vec4 fc,in vec2 frag){
   
   // BOTTOM SAFETY MASK:
   // Preserves the top beam completely (yPix > 0).
-  // Smoothly fades out ONLY the bottom part before it hits the screen edge (~23.0 units).
-  float distDown = max(0.0, -yPix);
-  float bottomMask = 1.0 - smoothstep(12.0, 22.5, distDown);
-  
-  col *= eM * bottomMask;
+  // Smoothly fades out ONLY the bottom part before it hits the screen edge.
+   // Extending range to 55.0-70.0 to ensure fog reaches the very bottom.
+   float distDown = max(0.0, -yPix);
+   float bottomMask = 1.0 - smoothstep(55.0, 70.0, distDown);
+   
+   col *= eM * bottomMask;
   alpha *= eM * bottomMask;
   
   col*=uFade; alpha*=uFade;

@@ -69,8 +69,6 @@ function HeroScene() {
         {
           '--mx': `${(mouse.x + 1) * 50}%`,
           '--my': `${(1 - mouse.y) * 50}%`,
-          maskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)',
-          WebkitMaskImage: 'linear-gradient(to bottom, black 85%, transparent 100%)',
         } as React.CSSProperties
       }
     >
@@ -82,8 +80,12 @@ function HeroScene() {
         }}
       />
       <div
-        className="absolute left-0 top-0 right-0 pointer-events-none"
-        style={{ height: `calc(100% + ${FOG_OVERLAP}px)` }}
+        className="absolute left-0 top-0 right-0 pointer-events-none z-10"
+        style={{ 
+          height: `calc(100% + ${FOG_OVERLAP}px)`,
+          maskImage: `linear-gradient(to bottom, black calc(100% - ${FOG_OVERLAP}px), transparent 100%)`,
+          WebkitMaskImage: `linear-gradient(to bottom, black calc(100% - ${FOG_OVERLAP}px), transparent 100%)`,
+        }}
       >
         <Canvas
           camera={{ position: [0, 0, 8], fov: 50 }}
