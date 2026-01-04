@@ -64,24 +64,23 @@ export function Vault() {
       // Если часть справа (x > 0) -> двигаем вправо (+ offset)
       // Если x = 0, используем fallback: leftPart -> влево, rightPart -> вправо
 
-      // --- Timeline Logic ---
+      // --- Timeline Logic (Updated: Start Open -> Close -> Exit) ---
       let currentOffset = 0;
       let parallaxY = 0;
 
       if (scrollProgress < 0.3) {
-        // 0.0 -> 0.3 : Opening (0 -> 1)
-        currentOffset = scrollProgress / 0.3;
-      } else if (scrollProgress < 0.6) {
-        // 0.3 -> 0.6 : Hold (1)
-        currentOffset = 1;
-      } else if (scrollProgress < 0.9) {
-        // 0.6 -> 0.9 : Closing (1 -> 0)
-        currentOffset = 1 - (scrollProgress - 0.6) / 0.3;
+        // 0.0 -> 0.3 : Closing (1 -> 0)
+        // scroll 0 => offset 1 (Open)
+        // scroll 0.3 => offset 0 (Closed)
+        currentOffset = 1 - scrollProgress / 0.3;
+        parallaxY = 0;
       } else {
-        // 0.9 -> 1.0 : Closed (0) + Parallax Exit
+        // 0.3 -> 1.0 : Closed (0) + Parallax Exit
         currentOffset = 0;
-        // Parallax: 0 -> 1 mapped to 0 -> 8 units up (Reduced from 15)
-        parallaxY = ((scrollProgress - 0.9) / 0.1) * 8;
+        // Parallax: 0.3 -> 1.0 mapped to 0 -> 5 units up (Reduced speed)
+        // (scrollProgress - 0.3) goes from 0 to 0.7
+        // We divide by 0.7 to normalize to 0..1
+        parallaxY = ((scrollProgress - 0.3) / 0.7) * 7;
       }
 
       // Clamp values just in case
