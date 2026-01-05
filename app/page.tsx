@@ -5,7 +5,7 @@ import {
   CategoriesFallback,
   CoinOverviewFallback,
   TrendingCoinsFallback,
-} from '@/components/home/Fallback';
+} from '@/components/home/HomeFallback';
 import Categories from '@/components/home/Categories';
 import { HeroScene } from '@/components/vault-hero/HeroSceneClient';
 

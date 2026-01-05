@@ -3,7 +3,7 @@ import DataTable from '@/components/DataTable';
 import Image from 'next/image';
 import { cn, formatCurrency, formatPercentage } from '@/lib/utils';
 import { TrendingDown, TrendingUp } from 'lucide-react';
-import { CategoriesFallback } from './Fallback';
+import { CategoriesFallback } from './HomeFallback';
 import { ScrollAnimationWrapper } from '@/components/ui/ScrollAnimationWrapper';
 
 // eslint-disable-next-line max-lines-per-function
