@@ -6,7 +6,7 @@
  */
 
 // Динамический импорт для избежания SSR проблем
-export { HeroScene } from './HeroScene.client';
+export { HeroScene } from './HeroSceneClient';
 
 // Прямые экспорты (используются внутри HeroScene)
 export { Vault } from './Vault';

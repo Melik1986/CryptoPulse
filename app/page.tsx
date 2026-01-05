@@ -5,9 +5,9 @@ import {
   CategoriesFallback,
   CoinOverviewFallback,
   TrendingCoinsFallback,
-} from '@/components/home/fallback';
+} from '@/components/home/Fallback';
 import Categories from '@/components/home/Categories';
-import { HeroScene } from '@/components/vault-hero';
+import { HeroScene } from '@/components/vault-hero/HeroSceneClient';
 
 const Page = async () => {
   return (

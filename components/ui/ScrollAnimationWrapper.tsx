@@ -13,6 +13,7 @@ interface ScrollAnimationWrapperProps {
   id?: string;
 }
 
+/* eslint-disable max-lines-per-function */
 export const ScrollAnimationWrapper = ({
   children,
   className,

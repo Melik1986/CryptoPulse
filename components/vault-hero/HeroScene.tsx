@@ -10,7 +10,7 @@
 
 import { Canvas } from '@react-three/fiber';
 import { Html } from '@react-three/drei';
-import { Suspense, useState, use } from 'react';
+import { Suspense, useState, use, useEffect } from 'react';
 import Image from 'next/image';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import { Vault } from './Vault';
@@ -67,6 +67,23 @@ function HeroScene() {
   const flashlight = useVaultStore(
     (state) => state.flashlight || { enabled: false, radius: 300, opacity: 0.9, sharpness: 0.5 },
   );
+
+  // Определение мобильного устройства через ширину окна (SSR safe)
+  const [isMobile, setIsMobile] = useState(false);
+
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    // Инициализация
+    const checkMobile = () => {
+      setIsMobile(window.innerWidth < 768);
+    };
+
+    checkMobile(); // Вызываем один раз при маунте
+
+    window.addEventListener('resize', checkMobile);
+    return () => window.removeEventListener('resize', checkMobile);
+  }, []);
 
   const [isLowEnd] = useState(() => {
     // Lazy initial state: выполняется только один раз при маунте
@@ -129,7 +146,7 @@ function HeroScene() {
           {/* Logo Layer - Column Layout: Icon Top, Text Bottom */}
           <div className="absolute inset-0 flex flex-col items-center justify-center opacity-20 select-none">
             {/* Icon - Left part of SVG */}
-            <div className="w-[23rem] h-[23rem] relative overflow-hidden shrink-0">
+            <div className="w-[60vw] h-[60vw] max-w-[23rem] max-h-[23rem] relative overflow-hidden shrink-0 mb-[10vh] md:mb-0">
               <Image
                 src="/logo.svg"
                 alt="CoinPulse Icon"
@@ -142,7 +159,7 @@ function HeroScene() {
 
             {/* Text - Right part of SVG */}
             <div
-              className="h-[23.75rem] mb-[2.5rem] relative overflow-hidden shrink-0"
+              className="w-[80vw] max-w-[40rem] mb-[5vmin] md:mb-[2.5rem] relative overflow-hidden shrink-0"
               style={{ aspectRatio: '86/30' }}
             >
               <Image
@@ -175,8 +192,8 @@ function HeroScene() {
               <CameraRig />
               {/* <FittedGrid /> - Replaced by CSS Grid behind Canvas */}
               <LaserFlow
-                horizontalBeamOffset={0}
-                verticalBeamOffset={-0.3}
+                horizontalBeamOffset={isMobile ? -0.17 : 0} // Сдвигаем влево на мобильных для центрирования
+                verticalBeamOffset={-0.3} // Возвращаем исходную высоту (-0.3), так как поднятие было ошибкой
                 verticalSizing={30.0}
                 horizontalSizing={1.0}
                 wispDensity={isLowEnd ? 1.5 : 3.0}

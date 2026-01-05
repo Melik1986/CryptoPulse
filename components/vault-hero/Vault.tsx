@@ -130,7 +130,16 @@ export function Vault() {
       const rightDir =
         initialPositions.current.right !== 0 ? Math.sign(initialPositions.current.right) : 1;
 
-      // Коэффициент 2.5 определяет ширину открытия
+      // const openDistance = 2.5; // Возвращаем 2.5
+
+      // Логика "приблизить друг к другу" скорее относится к начальной позиции (меньше зазор в закрытом состоянии)
+      // или к уменьшению масштаба всей сцены на мобильных, чтобы они влезали в экран.
+      // Но если речь про открытое состояние, то уменьшение множителя offset сближает их.
+
+      // Вернемся к правке в HeroScene для логотипа, а тут попробуем сблизить створки.
+      // Если "приблизить друг к другу" означает уменьшить расстояние МЕЖДУ ними в открытом состоянии:
+      // const targetLeftX = initialPositions.current.left + leftDir * currentOffset * 2.0; // Уменьшили разлет до 2.0
+      // const targetRightX = initialPositions.current.right + rightDir * currentOffset * 2.0;
       const targetLeftX = initialPositions.current.left + leftDir * currentOffset * 2.5;
       const targetRightX = initialPositions.current.right + rightDir * currentOffset * 2.5;
 
