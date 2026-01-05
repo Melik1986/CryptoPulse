@@ -192,7 +192,7 @@ function HeroScene() {
               <CameraRig />
               {/* <FittedGrid /> - Replaced by CSS Grid behind Canvas */}
               <LaserFlow
-                horizontalBeamOffset={isMobile ? -0 : 0} // Сдвигаем влево на мобильных для центрирования
+                horizontalBeamOffset={isMobile ? -0.16 : 0} // Сдвигаем влево на мобильных для центрирования
                 verticalBeamOffset={-0.3} // Возвращаем исходную высоту (-0.3), так как поднятие было ошибкой
                 verticalSizing={30.0}
                 horizontalSizing={1.0}
