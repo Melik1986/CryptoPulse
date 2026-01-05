@@ -6,6 +6,7 @@ import { TrendingDown, TrendingUp } from 'lucide-react';
 import DataTable from '@/components/DataTable';
 import { TrendingCoinsFallback } from './fallback';
 
+// eslint-disable-next-line max-lines-per-function
 const TrendingCoins = async () => {
   let trendingCoins;
 

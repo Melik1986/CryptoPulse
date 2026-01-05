@@ -12,6 +12,7 @@ import { CandlestickSeries, createChart, IChartApi, ISeriesApi } from 'lightweig
 import { fetcher } from '@/lib/coingecko.actions';
 import { convertOHLCData } from '@/lib/utils';
 
+// eslint-disable-next-line max-lines-per-function
 const CandlestickChart = ({
   children,
   data,

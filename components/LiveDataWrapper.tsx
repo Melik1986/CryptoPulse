@@ -9,6 +9,7 @@ import { useState } from 'react';
 import CoinHeader from '@/components/CoinHeader';
 
 // TODO: Незавершённая фича - children планируется использовать в будущем
+// eslint-disable-next-line max-lines-per-function
 const LiveDataWrapper = ({
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   children: _children,

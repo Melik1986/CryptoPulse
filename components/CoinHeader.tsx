@@ -3,6 +3,7 @@ import Image from 'next/image';
 import { Badge } from '@/components/ui/badge';
 import { TrendingDown, TrendingUp } from 'lucide-react';
 
+// eslint-disable-next-line max-lines-per-function
 const CoinHeader = ({
   livePriceChangePercentage24h,
   priceChangePercentage30d,

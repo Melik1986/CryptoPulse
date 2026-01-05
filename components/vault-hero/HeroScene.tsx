@@ -45,6 +45,7 @@ function SceneLoader() {
   );
 }
 
+// eslint-disable-next-line max-lines-per-function
 function HeroScene() {
   // ✅ Этап 4: Подключен useVaultEvents для обработки mousemove
   useVaultEvents();

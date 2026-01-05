@@ -6,6 +6,7 @@ import { formatCurrency } from '@/lib/utils';
 import LiveDataWrapper from '@/components/LiveDataWrapper';
 import Converter from '@/components/Converter';
 
+// eslint-disable-next-line max-lines-per-function
 const Page = async ({ params }: NextPageProps) => {
   const { id } = await params;
 

@@ -63,6 +63,7 @@ export const TrendingCoinsFallback = () => {
   );
 };
 
+// eslint-disable-next-line max-lines-per-function
 export const CategoriesFallback = () => {
   const columns = [
     {

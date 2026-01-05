@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint",
+    "lint": "eslint && npm run validate-rules",
+    "validate-rules": "node scripts/validate-rules.mjs",
     "format": "prettier --write .",
     "prepare": "husky"
   },

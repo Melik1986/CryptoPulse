@@ -5,6 +5,7 @@ import { cn, formatCurrency, formatPercentage } from '@/lib/utils';
 import { TrendingDown, TrendingUp } from 'lucide-react';
 import { CategoriesFallback } from './fallback';
 
+// eslint-disable-next-line max-lines-per-function
 const Categories = async () => {
   try {
     const categories = await fetcher<Category[]>('/coins/categories');

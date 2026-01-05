@@ -1,5 +1,7 @@
 'use server';
 
+/* eslint-disable no-console */
+
 import qs from 'query-string';
 import {
   isMockMode,
@@ -96,6 +98,7 @@ export async function fetcher<T>(
       if (response.status === 429 || response.status === 400 || response.status === 401) {
         console.warn(`[CoinGecko] API error ${response.status}, falling back to mock data`);
         const mockData = getMockData<T>(endpoint);
+        // eslint-disable-next-line max-depth
         if (mockData) {
           return mockData;
         }

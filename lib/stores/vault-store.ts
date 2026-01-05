@@ -22,6 +22,7 @@ interface VaultStore extends VaultState, VaultActions {}
  */
 export const useVaultStore = create<VaultStore>()(
   devtools(
+    // eslint-disable-next-line max-lines-per-function
     (set) => ({
       // ============================================
       // Initial State

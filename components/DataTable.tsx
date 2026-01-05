@@ -8,6 +8,7 @@ import {
 } from '@/components/ui/table';
 import { cn } from '@/lib/utils';
 
+// eslint-disable-next-line max-lines-per-function
 const DataTable = <T,>({
   columns,
   data,

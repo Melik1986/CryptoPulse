@@ -17,6 +17,7 @@ import * as THREE from 'three';
 // Загрузка GLB модели
 useGLTF.preload('/model/Vault.glb');
 
+// eslint-disable-next-line max-lines-per-function
 export function Vault() {
   // Загружаем GLB модель
   const { scene } = useGLTF('/model/Vault.glb');

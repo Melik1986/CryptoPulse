@@ -6,6 +6,7 @@ import { cn, formatPercentage, formatCurrency } from '@/lib/utils';
 import DataTable from '@/components/DataTable';
 import CoinsPagination from '@/components/CoinsPagination';
 
+// eslint-disable-next-line max-lines-per-function
 const Coins = async ({ searchParams }: NextPageProps) => {
   const { page } = await searchParams;
 

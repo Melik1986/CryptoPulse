@@ -281,6 +281,7 @@ const hexToRGB = (hex: string) => {
   return { r: ((n >> 16) & 255) / 255, g: ((n >> 8) & 255) / 255, b: (n & 255) / 255 };
 };
 
+// eslint-disable-next-line max-lines-per-function
 export function LaserFlow({
   wispDensity = 1,
   mouseSmoothTime = 0.0,

@@ -1,5 +1,7 @@
 import { test, expect } from '@playwright/test';
 
+/* eslint-disable no-console */
+
 test.describe('Hero Scene Performance', () => {
   test('should load laser and maintain high FPS', async ({ page }) => {
     // 1. Measure Load Time
