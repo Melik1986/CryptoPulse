@@ -81,6 +81,8 @@ If you're getting started and need assistance or face any bugs, join our active 
 
 👉 **Global Search Functionality**: A powerful, unified search bar that allows users to quickly locate any crypto asset by name or symbol, linking directly to the respective Token Detail Page via the CoinGecko `/search` and `/coins/{id}` REST endpoints.
 
+👉 **Cinematic Vault Hero Section**: An immersive, high-performance 3D hero experience built with React Three Fiber. It features a custom GLB model of a secure vault, volumetric laser lighting effects powered by raw GLSL shaders, and responsive camera parallax. The scene is optimized for all devices, including mobile and low-end GPUs, ensuring smooth 60 FPS animations and instant loading times.
+
 And many more, including code architecture and reusability.
 
 ## <a name="quick-start">🤸 Quick Start</a>
