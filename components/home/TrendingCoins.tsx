@@ -5,6 +5,7 @@ import { cn, formatCurrency, formatPercentage } from '@/lib/utils';
 import { TrendingDown, TrendingUp } from 'lucide-react';
 import DataTable from '@/components/DataTable';
 import { TrendingCoinsFallback } from './fallback';
+import { ScrollAnimationWrapper } from '@/components/ui/ScrollAnimationWrapper';
 
 // eslint-disable-next-line max-lines-per-function
 const TrendingCoins = async () => {
@@ -67,7 +68,7 @@ const TrendingCoins = async () => {
   ];
 
   return (
-    <div id="trending-coins">
+    <ScrollAnimationWrapper id="trending-coins">
       <h4>Trending Coins</h4>
 
       <DataTable
@@ -78,7 +79,7 @@ const TrendingCoins = async () => {
         headerCellClassName="py-3!"
         bodyCellClassName="py-2!"
       />
-    </div>
+    </ScrollAnimationWrapper>
   );
 };
 

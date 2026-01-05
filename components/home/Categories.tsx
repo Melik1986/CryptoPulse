@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { cn, formatCurrency, formatPercentage } from '@/lib/utils';
 import { TrendingDown, TrendingUp } from 'lucide-react';
 import { CategoriesFallback } from './fallback';
+import { ScrollAnimationWrapper } from '@/components/ui/ScrollAnimationWrapper';
 
 // eslint-disable-next-line max-lines-per-function
 const Categories = async () => {
@@ -65,7 +66,7 @@ const Categories = async () => {
     ];
 
     return (
-      <div id="categories" className="custom-scrollbar">
+      <ScrollAnimationWrapper id="categories" className="custom-scrollbar">
         <h4>Top Categories</h4>
 
         <DataTable
@@ -74,7 +75,7 @@ const Categories = async () => {
           rowKey={(_, index) => index}
           tableClassName="mt-3"
         />
-      </div>
+      </ScrollAnimationWrapper>
     );
   } catch (error) {
     console.error('Error fetching categories:', error);

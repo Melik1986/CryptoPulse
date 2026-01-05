@@ -4,6 +4,7 @@ import Image from 'next/image';
 import { formatCurrency } from '@/lib/utils';
 import { CoinOverviewFallback } from './fallback';
 import CandlestickChart from '@/components/CandlestickChart';
+import { ScrollAnimationWrapper } from '@/components/ui/ScrollAnimationWrapper';
 
 /**
  * Fetches coin data for overview
@@ -39,7 +40,7 @@ const CoinOverview = async () => {
   const { coin, coinOHLCData } = data;
 
   return (
-    <div id="coin-overview">
+    <ScrollAnimationWrapper id="coin-overview">
       <CandlestickChart data={coinOHLCData} coinId="bitcoin">
         <div className="header pt-2">
           <Image
@@ -57,7 +58,7 @@ const CoinOverview = async () => {
           </div>
         </div>
       </CandlestickChart>
-    </div>
+    </ScrollAnimationWrapper>
   );
 };
 
