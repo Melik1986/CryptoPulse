@@ -9,7 +9,8 @@
  */
 
 import { Canvas } from '@react-three/fiber';
-import { Suspense, useState } from 'react';
+import { Html } from '@react-three/drei';
+import { Suspense, useState, use } from 'react';
 import Image from 'next/image';
 import { EffectComposer, Bloom, Vignette } from '@react-three/postprocessing';
 import { Vault } from './Vault';
@@ -20,6 +21,7 @@ import { useVaultScroll } from '@/hooks/useVaultScroll';
 import { LaserFlow } from '@/components/vault-hero/LaserFlow';
 // import { FittedGrid } from '@/components/vault-hero/FittedGrid';
 import { useVaultStore } from '@/lib/stores/vault-store';
+import { Loader } from './loader';
 
 /** Простая проверка на производительность устройства */
 const isLowEndDevice = () => {
@@ -38,11 +40,15 @@ const isLowEndDevice = () => {
 /** Loading fallback для 3D сцены */
 function SceneLoader() {
   return (
-    <mesh>
-      <boxGeometry args={[1, 1, 1]} />
-      <meshBasicMaterial color="#1b1f2a" wireframe />
-    </mesh>
+    <Html center>
+      <Loader />
+    </Html>
   );
+}
+
+function MinDelay({ promise }: { promise: Promise<void> }) {
+  use(promise);
+  return null;
 }
 
 // eslint-disable-next-line max-lines-per-function
@@ -51,6 +57,11 @@ function HeroScene() {
   useVaultEvents();
   // ✅ Этап 5: Подключен useVaultScroll для обработки скролла
   useVaultScroll();
+
+  // Создаем промис для минимальной задержки (3 секунды) только один раз при инициализации
+  const [minLoadPromise] = useState(
+    () => new Promise<void>((resolve) => setTimeout(resolve, 3000)),
+  );
 
   const mouse = useVaultStore((state) => state.mouse);
   const flashlight = useVaultStore(
@@ -160,6 +171,7 @@ function HeroScene() {
             gl={{ antialias: !isLowEnd, alpha: true }}
           >
             <Suspense fallback={<SceneLoader />}>
+              <MinDelay promise={minLoadPromise} />
               <CameraRig />
               {/* <FittedGrid /> - Replaced by CSS Grid behind Canvas */}
               <LaserFlow
